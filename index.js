@@ -17,9 +17,7 @@ const PORT = process.env.PORT || 8080;
 //MIDDLEWARES
 app.use(
   cors({
-    origin: "https://pwa-recipe-back-5eop.vercel.app/",
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    credentials: false,
+    origin: "*",
   })
 );
 app.use(bodyParser.urlencoded({ extended: false }));
