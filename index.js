@@ -15,11 +15,22 @@ require("dotenv").config();
 const app = express();
 const PORT = process.env.PORT || 8080;
 //MIDDLEWARES
-app.use(
-  cors({
-    origin: "*",
-  })
-);
+// app.use(
+//   cors({
+//     origin: "*",
+//   })
+// );
+
+const corsOptions = {
+  origin: [
+    "https://pwa-recipe-back.vercel.app",
+    "https://pwa-recipe-back-5eop.vercel.app",
+  ],
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true,
+};
+app.use(cors(corsOptions));
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
