@@ -10,7 +10,7 @@ var express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const axios = require("axios");
-const allowCors = require("./middleware/allowCors");
+// const allowCors = require("./middleware/allowCors");
 require("dotenv").config();
 
 const app = express();

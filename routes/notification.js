@@ -28,12 +28,31 @@ const corsOptions = {
   optionsSuccessStatus: 204,
 };
 
+const allowCors = (fn) => async (req, res) => {
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://react-e-commerce-kappa.vercel.app"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET,OPTIONS,PATCH,DELETE,POST,PUT"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
+  );
+  if (req.method === "OPTIONS") {
+    res.status(204).end();
+    return;
+  }
+  return await fn(req, res);
+};
+
 router.post(
   "/subscribe",
   // cors(corsOptions),
-  allowCors,
-  authMiddleware,
-  async (req, res) => {
+  // authMiddleware,
+  allowCors(async (req, res) => {
     try {
       const { userId } = req.user;
       if (!userId) throw new Error("User id not defined");
@@ -84,7 +103,7 @@ router.post(
       console.log(error);
       return res.status(500).json({ message: error.message });
     }
-  }
+  })
 );
 
 router.get("/test", authMiddleware, async (req, res) => {
