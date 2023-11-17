@@ -86,7 +86,7 @@ router.post(
   }
 );
 
-router.get("/test", allowCors, authMiddleware, async (req, res) => {
+router.get("/test", authMiddleware, async (req, res) => {
   try {
     const { userId } = req.user;
     if (!userId) throw new Error("User id not defined");
