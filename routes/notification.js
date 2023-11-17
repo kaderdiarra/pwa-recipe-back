@@ -5,6 +5,7 @@ const authMiddleware = require("../middleware/auth");
 require("dotenv").config();
 const User = require("../models/user");
 const sendNotification = require("../services/sendNotification");
+const allowCors = require("../middleware/allowCors");
 
 const pushSubscription = {
   endpoint: "http://localhost:3000/notifications",
@@ -20,7 +21,7 @@ webpush.setVapidDetails(
   process.env.VAPID_PRIVATE_KEY
 );
 
-router.post("/subscribe", authMiddleware, async (req, res) => {
+router.post("/subscribe", allowCors, authMiddleware, async (req, res) => {
   try {
     const { userId } = req.user;
     if (!userId) throw new Error("User id not defined");
@@ -73,7 +74,7 @@ router.post("/subscribe", authMiddleware, async (req, res) => {
   }
 });
 
-router.get("/test", authMiddleware, async (req, res) => {
+router.get("/test", allowCors, authMiddleware, async (req, res) => {
   try {
     const { userId } = req.user;
     if (!userId) throw new Error("User id not defined");

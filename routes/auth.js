@@ -4,9 +4,10 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const authMiddleware = require("../middleware/auth");
+const allowCors = require("../middleware/allowCors");
 
 // Register route
-router.post("/register", async (req, res) => {
+router.post("/register", allowCors, async (req, res) => {
   try {
     const { username, email, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -23,7 +24,7 @@ router.post("/register", async (req, res) => {
 });
 
 // Login route
-router.post("/login", async (req, res) => {
+router.post("/login", allowCors, async (req, res) => {
   try {
     const { email, password } = req.body;
     console.log("🚀 ~ file: auth.js:29 ~ router.post ~ email:", email);
@@ -44,7 +45,7 @@ router.post("/login", async (req, res) => {
 });
 
 // Test token verification
-router.get("/test", authMiddleware, (req, res) => {
+router.get("/test", authMiddleware, allowCors, (req, res) => {
   res.json({ message: "Token verified successfully" });
 });
 
