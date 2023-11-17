@@ -31,7 +31,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.options("*", cors(corsOptions));
 
-// app.use(allowCorshow );
+app.use(allowCors);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
