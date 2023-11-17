@@ -90,7 +90,7 @@ router.get("/test", authMiddleware, async (req, res) => {
       icon: "https://images.crunchbase.com/image/upload/c_lpad,h_170,w_170,f_auto,b_white,q_auto:eco,dpr_1/v1492523647/mrkkkgasub1waepp0agu.jpg",
       tag: "test",
       data: {
-        actionButtonLink: "https://www.youtube.com",
+        actionButtonLink: "https://www.youtube.com/",
       },
     };
 
