@@ -48,20 +48,20 @@ router.post("/subscribe", authMiddleware, async (req, res) => {
     //       { action: "Dismiss", title: "Une autre action" },
     //     ],
     //     data: {
-    //       onActionClick: {
-    //         default: {
-    //           operation: "openWindow",
-    //           url: "http://localhost:3000/notifications",
-    //         },
-    //         View: {
-    //           operation: "focusLastFocusedOrOpen",
-    //           url: "/recipe/view",
-    //         },
-    //         Dismiss: {
-    //           operation: "navigateLastFocusedOrOpen",
-    //           url: "/recipe/dismiss",
-    //         },
-    //       },
+    // onActionClick: {
+    //   default: {
+    //     operation: "openWindow",
+    //     url: "http://localhost:3000/notifications",
+    //   },
+    //   View: {
+    //     operation: "focusLastFocusedOrOpen",
+    //     url: "/recipe/view",
+    //   },
+    //   Dismiss: {
+    //     operation: "navigateLastFocusedOrOpen",
+    //     url: "/recipe/dismiss",
+    //   },
+    // },
     //     },
     //   },
     // });
@@ -81,10 +81,17 @@ router.get("/test", authMiddleware, async (req, res) => {
     const payload = {
       title: "New Notification from Server",
       body: "Push notification from section.io", //the body of the push notification
+      actions: [
+        { action: "openLikeComment", title: "Voir", icon: "👀" },
+        { action: "dismiss", title: "Fermer", icon: "❌" },
+      ],
       image:
-        "https://pixabay.com/vectors/bell-notification-communication-1096280/",
-      icon: "https://pixabay.com/vectors/bell-notification-communication-1096280/",
+        "https://images.crunchbase.com/image/upload/c_lpad,h_170,w_170,f_auto,b_white,q_auto:eco,dpr_1/v1492523647/mrkkkgasub1waepp0agu.jpg",
+      icon: "https://images.crunchbase.com/image/upload/c_lpad,h_170,w_170,f_auto,b_white,q_auto:eco,dpr_1/v1492523647/mrkkkgasub1waepp0agu.jpg",
       tag: "test",
+      data: {
+        actionButtonLink: "https://www.youtube.com",
+      },
     };
 
     await sendNotification(userId, payload);

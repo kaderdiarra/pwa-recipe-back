@@ -47,7 +47,10 @@ router.post("/like/add", authMiddleware, async (req, res) => {
   try {
     const { mealId, commentId } = req.body;
     const userId = req.user.userId;
+    console.log("🚀 ~ file: comments.js:49 ~ router.post ~ mealId:", mealId);
 
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
     // Find or create a meal by name
     const meal = await Meal.findOneAndUpdate(
       { name: mealId },
@@ -75,20 +78,26 @@ router.post("/like/add", authMiddleware, async (req, res) => {
 
     // Add the user's ID to the likes array
     comment.likes.push(userId);
-    console.log(
-      "🚀 ~ file: comments.js:75 ~ router.post ~ comment:",
-      comment.author
-    );
+
     const notificationPayload = {
-      title: "New Notification from Server",
-      body: "Push notification from section.io", //the body of the push notification
+      title: `Like ❤️`,
+      body: `${user.username} a like votre commentaire`, //the body of the push notification
+      actions: [
+        { action: "openLikeComment", title: "Voir", icon: "👀" },
+        { action: "dismiss", title: "Fermer", icon: "❌" },
+      ],
       image:
-        "https://pixabay.com/vectors/bell-notification-communication-1096280/",
-      icon: "https://pixabay.com/vectors/bell-notification-communication-1096280/",
-      tag: "test",
+        "https://images.crunchbase.com/image/upload/c_lpad,h_170,w_170,f_auto,b_white,q_auto:eco,dpr_1/v1492523647/mrkkkgasub1waepp0agu.jpg",
+      icon: "https://images.crunchbase.com/image/upload/c_lpad,h_170,w_170,f_auto,b_white,q_auto:eco,dpr_1/v1492523647/mrkkkgasub1waepp0agu.jpg",
+      tag: "like_comment",
+      data: {
+        actionButtonLink: `${process.env.FRONT_BASE_URL}/recipe/${mealId}`,
+      },
     };
 
-    sendNotification(comment.author, notificationPayload);
+    //TODO: Don't send notification is user like itself
+    if (userId !== comment.author)
+      sendNotification(comment.author, notificationPayload);
 
     // Save the updated meal
     await meal.save();
