@@ -10,6 +10,7 @@ var express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const axios = require("axios");
+const allowCors = require("./middleware/allowCors");
 require("dotenv").config();
 
 const app = express();
@@ -22,15 +23,15 @@ const PORT = process.env.PORT || 8080;
 // );
 
 const corsOptions = {
-  origin: [
-    "https://pwa-recipe-back.vercel.app",
-    "https://pwa-recipe-back-5eop.vercel.app",
-  ],
+  origin: "*",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
+  optionsSuccessStatus: 204,
 };
 app.use(cors(corsOptions));
 app.options("*", cors(corsOptions));
+
+// app.use(allowCorshow );
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
