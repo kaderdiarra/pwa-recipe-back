@@ -112,7 +112,7 @@ router.get("/test", authMiddleware, async (req, res) => {
     if (!userId) throw new Error("User id not defined");
 
     const payload = {
-      title: "New Notification from Server",
+      title: "New Notification from Servers",
       body: "Push notification from section.io", //the body of the push notification
       actions: [
         { action: "openLikeComment", title: "Voir", icon: "👀" },
