@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const webpush = require("web-push");
+const cors = require("cors");
 const authMiddleware = require("../middleware/auth");
 require("dotenv").config();
 const User = require("../models/user");
 const sendNotification = require("../services/sendNotification");
 const allowCors = require("../middleware/allowCors");
-
 const pushSubscription = {
   endpoint: "http://localhost:3000/notifications",
   keys: {
@@ -21,58 +21,70 @@ webpush.setVapidDetails(
   process.env.VAPID_PRIVATE_KEY
 );
 
-router.post("/subscribe", allowCors, authMiddleware, async (req, res) => {
-  try {
-    const { userId } = req.user;
-    if (!userId) throw new Error("User id not defined");
-    const subscription = req.body;
+const corsOptions = {
+  origin: "*",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true,
+  optionsSuccessStatus: 204,
+};
 
-    console.log(
-      "🚀 ~ file: notification.js:24 ~ router.post ~ subscription:",
-      subscription
-    );
-    //TODO: get user
-    const user = await User.findById(userId);
-    user.notificationSubscription = subscription;
-    await user.save();
+router.post(
+  "/subscribe",
+  cors(corsOptions),
+  authMiddleware,
+  async (req, res) => {
+    try {
+      const { userId } = req.user;
+      if (!userId) throw new Error("User id not defined");
+      const subscription = req.body;
 
-    //TODO: save subscription inside user
-    res.status(200).json({});
+      console.log(
+        "🚀 ~ file: notification.js:24 ~ router.post ~ subscription:",
+        subscription
+      );
+      //TODO: get user
+      const user = await User.findById(userId);
+      user.notificationSubscription = subscription;
+      await user.save();
 
-    // const payload = JSON.stringify({
-    //   notification: {
-    //     title: "Hello World! 🌍",
-    //     body: "Testing notification system",
-    //     icon: "assets/icons/epitech-logo.jpeg",
-    //     actions: [
-    //       { action: "View", title: "Action custom" },
-    //       { action: "Dismiss", title: "Une autre action" },
-    //     ],
-    //     data: {
-    // onActionClick: {
-    //   default: {
-    //     operation: "openWindow",
-    //     url: "http://localhost:3000/notifications",
-    //   },
-    //   View: {
-    //     operation: "focusLastFocusedOrOpen",
-    //     url: "/recipe/view",
-    //   },
-    //   Dismiss: {
-    //     operation: "navigateLastFocusedOrOpen",
-    //     url: "/recipe/dismiss",
-    //   },
-    // },
-    //     },
-    //   },
-    // });
+      //TODO: save subscription inside user
+      res.status(200).json({});
 
-    // webpush.sendNotification(subscription, payload);
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ message: error.message });
+      // const payload = JSON.stringify({
+      //   notification: {
+      //     title: "Hello World! 🌍",
+      //     body: "Testing notification system",
+      //     icon: "assets/icons/epitech-logo.jpeg",
+      //     actions: [
+      //       { action: "View", title: "Action custom" },
+      //       { action: "Dismiss", title: "Une autre action" },
+      //     ],
+      //     data: {
+      // onActionClick: {
+      //   default: {
+      //     operation: "openWindow",
+      //     url: "http://localhost:3000/notifications",
+      //   },
+      //   View: {
+      //     operation: "focusLastFocusedOrOpen",
+      //     url: "/recipe/view",
+      //   },
+      //   Dismiss: {
+      //     operation: "navigateLastFocusedOrOpen",
+      //     url: "/recipe/dismiss",
+      //   },
+      // },
+      //     },
+      //   },
+      // });
+
+      // webpush.sendNotification(subscription, payload);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ message: error.message });
+    }
   }
-});
+);
 
 router.get("/test", allowCors, authMiddleware, async (req, res) => {
   try {
