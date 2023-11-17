@@ -15,7 +15,13 @@ require("dotenv").config();
 const app = express();
 const PORT = process.env.PORT || 8080;
 //MIDDLEWARES
-app.use(cors({ origin: "*" }));
+app.use(
+  cors({
+    origin: "*",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true,
+  })
+);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
