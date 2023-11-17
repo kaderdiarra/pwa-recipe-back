@@ -33,7 +33,7 @@ app.use("/notification", notificationRoute);
 // Connect to MongoDB
 console.log("connecting to database...");
 mongoose
-  .connect(process.env.MONGODB_URI, {})
+  .connect(process.env.MONGODB_URI, { dbName: "recipe-pwa" })
   .then(() => {
     console.log("Connected to MongoDB");
     app.listen(PORT, () => {
