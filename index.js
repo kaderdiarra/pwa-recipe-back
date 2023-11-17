@@ -33,22 +33,22 @@ app.options("*", cors(corsOptions));
 
 // app.use(allowCors);
 
-app.use(function (req, res, next) {
-  // CORS headers
-  res.header("Access-Control-Allow-Origin", "*"); // restrict it to the required domain
-  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-  // Set custom headers for CORS
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Content-type,Accept,X-Custom-Header,Origin,X-Requested-With"
-  );
+// app.use(function (req, res, next) {
+//   // CORS headers
+//   res.header("Access-Control-Allow-Origin", "*"); // restrict it to the required domain
+//   res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+//   // Set custom headers for CORS
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "Content-type,Accept,X-Custom-Header,Origin,X-Requested-With"
+//   );
 
-  if (req.method === "OPTIONS" || req.method === "options") {
-    return res.status(200).end();
-  }
+//   if (req.method === "OPTIONS" || req.method === "options") {
+//     return res.status(200).end();
+//   }
 
-  return next();
-});
+//   return next();
+// });
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

@@ -30,7 +30,8 @@ const corsOptions = {
 
 router.post(
   "/subscribe",
-  cors(corsOptions),
+  // cors(corsOptions),
+  allowCors,
   authMiddleware,
   async (req, res) => {
     try {
