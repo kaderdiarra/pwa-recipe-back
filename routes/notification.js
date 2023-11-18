@@ -28,83 +28,78 @@ const corsOptions = {
   optionsSuccessStatus: 204,
 };
 
-const allowCors = (fn) => async (req, res) => {
-  res.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://react-e-commerce-kappa.vercel.app"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET,OPTIONS,PATCH,DELETE,POST,PUT"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
-  );
-  if (req.method === "OPTIONS") {
-    res.status(204).end();
-    return;
+// const allowCors = (fn) => async (req, res) => {
+//   res.setHeader(
+//     "Access-Control-Allow-Origin",
+//     "https://react-e-commerce-kappa.vercel.app"
+//   );
+//   res.setHeader(
+//     "Access-Control-Allow-Methods",
+//     "GET,OPTIONS,PATCH,DELETE,POST,PUT"
+//   );
+//   res.setHeader(
+//     "Access-Control-Allow-Headers",
+//     "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
+//   );
+//   if (req.method === "OPTIONS") {
+//     res.status(204).end();
+//     return;
+//   }
+//   return await fn(req, res);
+// };
+
+router.post("/subscribe", authMiddleware, async (req, res) => {
+  try {
+    const { userId } = req.user;
+    if (!userId) throw new Error("User id not defined");
+    const subscription = req.body;
+
+    console.log(
+      "🚀 ~ file: notification.js:24 ~ router.post ~ subscription:",
+      subscription
+    );
+    //TODO: get user
+    const user = await User.findById(userId);
+    user.notificationSubscription = subscription;
+    await user.save();
+
+    //TODO: save subscription inside user
+    res.status(200).json({});
+
+    // const payload = JSON.stringify({
+    //   notification: {
+    //     title: "Hello World! 🌍",
+    //     body: "Testing notification system",
+    //     icon: "assets/icons/epitech-logo.jpeg",
+    //     actions: [
+    //       { action: "View", title: "Action custom" },
+    //       { action: "Dismiss", title: "Une autre action" },
+    //     ],
+    //     data: {
+    // onActionClick: {
+    //   default: {
+    //     operation: "openWindow",
+    //     url: "http://localhost:3000/notifications",
+    //   },
+    //   View: {
+    //     operation: "focusLastFocusedOrOpen",
+    //     url: "/recipe/view",
+    //   },
+    //   Dismiss: {
+    //     operation: "navigateLastFocusedOrOpen",
+    //     url: "/recipe/dismiss",
+    //   },
+    // },
+    //     },
+    //   },
+    // });
+
+    // webpush.sendNotification(subscription, payload);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: error.message });
   }
-  return await fn(req, res);
-};
-
-router.post(
-  "/subscribe",
-  // cors(corsOptions),
-  // authMiddleware,
-  allowCors(async (req, res) => {
-    try {
-      const { userId } = req.user;
-      if (!userId) throw new Error("User id not defined");
-      const subscription = req.body;
-
-      console.log(
-        "🚀 ~ file: notification.js:24 ~ router.post ~ subscription:",
-        subscription
-      );
-      //TODO: get user
-      const user = await User.findById(userId);
-      user.notificationSubscription = subscription;
-      await user.save();
-
-      //TODO: save subscription inside user
-      res.status(200).json({});
-
-      // const payload = JSON.stringify({
-      //   notification: {
-      //     title: "Hello World! 🌍",
-      //     body: "Testing notification system",
-      //     icon: "assets/icons/epitech-logo.jpeg",
-      //     actions: [
-      //       { action: "View", title: "Action custom" },
-      //       { action: "Dismiss", title: "Une autre action" },
-      //     ],
-      //     data: {
-      // onActionClick: {
-      //   default: {
-      //     operation: "openWindow",
-      //     url: "http://localhost:3000/notifications",
-      //   },
-      //   View: {
-      //     operation: "focusLastFocusedOrOpen",
-      //     url: "/recipe/view",
-      //   },
-      //   Dismiss: {
-      //     operation: "navigateLastFocusedOrOpen",
-      //     url: "/recipe/dismiss",
-      //   },
-      // },
-      //     },
-      //   },
-      // });
-
-      // webpush.sendNotification(subscription, payload);
-    } catch (error) {
-      console.log(error);
-      return res.status(500).json({ message: error.message });
-    }
-  })
-);
+});
 
 router.get("/test", authMiddleware, async (req, res) => {
   try {

@@ -56,12 +56,12 @@ app.get("/test", (req, res) => {
   console.log("test ok");
 });
 
-app.use("/api/auth", authRoutes);
-app.use("/api/favorites", favoritesRoutes);
-app.use("/api/comments", commentsRoutes);
-app.use("/api/meal", mealRoutes);
-app.use("/api/user", userRoutes);
-app.use("/api/notification", notificationRoute);
+app.use("/auth", authRoutes);
+app.use("/favorites", favoritesRoutes);
+app.use("/comments", commentsRoutes);
+app.use("/meal", mealRoutes);
+app.use("/user", userRoutes);
+app.use("/notification", notificationRoute);
 
 // Connect to MongoDB
 console.log("connecting to database...");
